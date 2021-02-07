@@ -1,0 +1,27 @@
+# IntelliJ project files
+
+# core
+assign1_core/.idea/
+assign1_core/target/
+assign1_core/assign1_core.iml
+
+
+# impl
+assign1_impl/.idea/
+assign1_impl/target/
+assign1_impl/assign1_impl.iml
+
+
+# rest
+SOEN487_Assign1/.idea/
+SOEN487_Assign1/target/
+SOEN487_Assign1/soen487.iml
+
+
+
+# editor, vim swap/backup files
+*.swp
+*~
+
+# OS Specific
+.DS_Store
