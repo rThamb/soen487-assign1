@@ -25,3 +25,8 @@ SOEN487_Assign1/soen487.iml
 
 # OS Specific
 .DS_Store
+
+# servlet
+artist-servlet/.idea/
+artist-servlet/target/
+artist-servlet/artist-servlet.iml
