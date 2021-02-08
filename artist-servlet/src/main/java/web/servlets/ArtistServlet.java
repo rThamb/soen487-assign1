@@ -35,16 +35,18 @@ public class ArtistServlet extends HttpServlet {
         List<Artist> artistList = new ArrayList<>();
         if(nickname == null) {
             artistList = repo.readAll();
-            System.out.println(artistList.get(0));
         }
         else
             artistList.add(repo.read(nickname));
 
-        response.setContentType("text/plain");
-        response.setCharacterEncoding("UTF-8");
-        PrintWriter writer = response.getWriter();
-       // writer.append(artistList.get(0).getFirstname());
-        System.out.println(artistList.get(0).toString());
+        String jsonResponse = "{ artists: [ ";
+
+        for (int i = 0; i < artistList.size(); i++) {
+            jsonResponse = jsonResponse + artistList.get(i);
+        }
+
+        jsonResponse = jsonResponse + " ] }";
+        sendResponse(response, jsonResponse);
     }
 
     @Override
@@ -56,8 +58,6 @@ public class ArtistServlet extends HttpServlet {
         String lastname = request.getParameter("lastname");
         String bio = request.getParameter("bio");
 
-        System.out.println(nickname);
-
         Artist artist = new Artist();
         artist.setNickname(nickname);
         artist.setFirstname(firstname);
@@ -65,6 +65,7 @@ public class ArtistServlet extends HttpServlet {
         artist.setBio(bio);
 
         repo.update(artist);
+        sendResponse(response, "Artist updated.");
     }
 
     @Override
@@ -89,6 +90,7 @@ public class ArtistServlet extends HttpServlet {
         artist.setBio((String)hashMap.get("bio"));
 
         repo.add(artist);
+        sendResponse(response, "Artist added.");
     }
 
     @Override
@@ -97,6 +99,18 @@ public class ArtistServlet extends HttpServlet {
 
         String nickname = request.getParameter("nickname");
 
-        repo.delete(nickname);
+        if(nickname != null){
+            repo.delete(nickname);
+            sendResponse(response, "Artist deleted.");
+        }else{
+            sendResponse(response, "No artist provided.");
+        }
+    }
+
+    private void sendResponse(HttpServletResponse response, String result) throws IOException{
+        response.setContentType("text/plain");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter writer = response.getWriter();
+        writer.append(result);
     }
 }
