@@ -16,7 +16,7 @@ public class ArtistDAO implements ArtistRepo {
 
     @Override
     public List<Artist> readAll() {
-        return null;
+        return artists;
     }
 
     private List<Artist>copyList(){

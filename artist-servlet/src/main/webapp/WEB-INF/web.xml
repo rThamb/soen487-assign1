@@ -4,4 +4,15 @@
 
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
+
+  <servlet>
+    <servlet-name>ArtistServlet</servlet-name>
+    <servlet-class>web.servlets.ArtistServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>ArtistServlet</servlet-name>
+    <url-pattern>/artist</url-pattern>
+  </servlet-mapping>
+
 </web-app>
