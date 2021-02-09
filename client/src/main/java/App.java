@@ -1,8 +1,18 @@
+import lib.models.Album;
+import lib.repos.ClientAlbumRepo;
+
+import java.io.IOException;
 import java.util.Scanner;
 
 public class App {
 
-    public static void main(String[] args){
+    private static ClientAlbumRepo repo = new ClientAlbumRepo();
+
+    public static void main(String[] args) throws Exception {
+
+        Scanner input = new Scanner(System.in);
+        o3(input);
+        /*
         Scanner input = new Scanner(System.in);
         int selection = 0;
 
@@ -31,11 +41,11 @@ public class App {
             handle(selection);
 
         }while(selection != -2);
-
+*/
 
     }
 
-    public static void handle(int selection) {
+    public static void handle(int selection, Scanner input) throws Exception {
         switch (selection) {
             case 1:
                 o1();
@@ -44,7 +54,7 @@ public class App {
                 o2();
                 break;
             case 3:
-                o3();
+                o3(input);
                 break;
             case 4:
                 o4();
@@ -73,9 +83,17 @@ public class App {
         }
     }
 
-    public static void o1(){ }
+    public static void o1() throws Exception {
+        repo.listAlbums();
+    }
     public static void o2(){ }
-    public static void o3(){ }
+    public static void o3(Scanner input) throws IOException {
+        System.out.println("Enter Album info (format) :    isrc; title; des; year;");
+
+        //String inputStr = input.nextLine();
+        String[] entries = "aa;bb;cc;12".split(";");//inputStr.split(";");
+        repo.add(entries);
+    }
     public static void o4(){ }
     public static void o5(){ }
     public static void o6(){ }
