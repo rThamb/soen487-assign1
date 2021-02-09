@@ -36,13 +36,19 @@ public class ArtistServlet extends HttpServlet {
         if(nickname == null) {
             artistList = repo.readAll();
         }
-        else
-            artistList.add(repo.read(nickname));
+        else {
+            Artist artist = repo.read(nickname);
+            if(artist != null)
+                artistList.add(artist);
+        }
 
         String jsonResponse = "{ artists: [ ";
 
         for (int i = 0; i < artistList.size(); i++) {
-            jsonResponse = jsonResponse + artistList.get(i);
+            if(i == 0)
+                jsonResponse = jsonResponse + artistList.get(i);
+            else
+                jsonResponse = jsonResponse + " , " + artistList.get(i);
         }
 
         jsonResponse = jsonResponse + " ] }";

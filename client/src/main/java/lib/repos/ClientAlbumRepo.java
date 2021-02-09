@@ -27,7 +27,7 @@ public class ClientAlbumRepo {
         return response;
     }
 
-    public String add(Album a){
+    public String add(Album a) throws IOException{
         String url = "";
         String response = this.httpClient.post(null, null);
         return "";

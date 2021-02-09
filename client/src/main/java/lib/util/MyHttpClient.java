@@ -1,16 +1,16 @@
 package lib.util;
 
 import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.*;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.*;
 
 //https://mkyong.com/java/apache-httpclient-examples/
 public class MyHttpClient {
@@ -19,16 +19,55 @@ public class MyHttpClient {
         return send(request);
     }
 
-    public String put(String url) throws IOException {
-        HttpPut request = new HttpPut(url);
-        return send(request);
+    public String put(String url, HashMap<String, String> payload) throws IOException {
+        HttpPut putRequest = new HttpPut(url);
+
+        //request parameters for put
+        List<NameValuePair> urlParameters = new ArrayList<>();
+        //to iterate through payload
+        Iterator hashMapIterator = payload.entrySet().iterator();
+
+        while(hashMapIterator.hasNext()){
+            Map.Entry hashMapElement = (Map.Entry) hashMapIterator.next();
+            urlParameters.add(new BasicNameValuePair((String) hashMapElement.getKey(), (String) hashMapElement.getValue()));
+        }
+
+        //set parameters as given from payload
+        putRequest.setEntity(new UrlEncodedFormEntity(urlParameters));
+
+        try (CloseableHttpClient httpClient = HttpClients.createDefault();
+             CloseableHttpResponse response = httpClient.execute(putRequest)){
+
+            return handleResponse(response);
+        }
     }
 
-    public String post(String url, HashMap<String, String> payload){
-        return "";
+    public String post(String url, HashMap<String, String> payload) throws IOException{
+        HttpPost postRequest = new HttpPost(url);
+
+        //request parameters for post
+        List<NameValuePair> urlParameters = new ArrayList<>();
+        //to iterate through payload
+        Iterator hashMapIterator = payload.entrySet().iterator();
+
+        while(hashMapIterator.hasNext()){
+            Map.Entry hashMapElement = (Map.Entry) hashMapIterator.next();
+            urlParameters.add(new BasicNameValuePair((String) hashMapElement.getKey(), (String) hashMapElement.getValue()));
+        }
+
+        //set parameters as given from payload
+        postRequest.setEntity(new UrlEncodedFormEntity(urlParameters));
+
+        try (CloseableHttpClient httpClient = HttpClients.createDefault();
+             CloseableHttpResponse response = httpClient.execute(postRequest)){
+
+            return handleResponse(response);
+        }
     }
-    public String delete(String url){
-        return "";
+
+    public String delete(String url) throws IOException{
+        HttpDelete request = new HttpDelete(url);
+        return send(request);
     }
 
     private String send(HttpUriRequest request) throws IOException {
@@ -38,18 +77,22 @@ public class MyHttpClient {
             // Get HttpResponse Status
             System.out.println(response.getStatusLine().toString());        // HTTP/1.1 200 OK
 
-            if(response.getStatusLine().getStatusCode() > 400 ){
-                throw new IOException("Failed Request: 200 code not returned");
-            }
-
-            HttpEntity entity = response.getEntity();
-            if (entity != null) {
-                // return it as a String
-                String result = EntityUtils.toString(entity);
-                return result;
-            }
-            else
-                return "";
+            return handleResponse(response);
         }
+    }
+
+    private String handleResponse(CloseableHttpResponse response) throws IOException {
+        if(response.getStatusLine().getStatusCode() > 400 ){
+            throw new IOException("Failed Request: 200 code not returned");
+        }
+
+        HttpEntity entity = response.getEntity();
+        if (entity != null) {
+            // return it as a String
+            String result = EntityUtils.toString(entity);
+            return result;
+        }
+        else
+            return "";
     }
 }
