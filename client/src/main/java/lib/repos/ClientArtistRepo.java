@@ -1,9 +1,6 @@
 package lib.repos;
 
-import lib.models.Album;
 import lib.util.MyHttpClient;
-
-import java.io.IOException;
 import java.util.HashMap;
 
 public class ClientArtistRepo {

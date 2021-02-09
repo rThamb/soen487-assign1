@@ -84,10 +84,8 @@ public class ArtistServlet extends HttpServlet {
 
         for (int i = 0; i < data.length; i++) {
             String[] pair = data[i].split("=");
-            hashMap.put(pair[0], pair[1]);
+            hashMap.put(pair[0], pair[1].replaceAll("\\+", " "));
         }
-
-        System.out.println((String)hashMap.get("nickname"));
 
         Artist artist = new Artist();
         artist.setNickname((String)hashMap.get("nickname"));
