@@ -13,15 +13,16 @@ public class AlbumDAO implements AlbumRepo {
     public AlbumDAO(){
         albums = new ArrayList<>();
     }
-    @Override
-    public List<Album> readAll() {
-        return copyList();
-    }
 
     private List<Album> copyList(){
         List<Album> copy = new ArrayList<>();
         this.albums.forEach(ele -> copy.add(new Album(ele)));
         return copy;
+    }
+
+    @Override
+    public List<Album> readAll() {
+        return albums;
     }
 
     @Override
