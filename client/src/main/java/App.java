@@ -1,6 +1,7 @@
 import lib.models.Album;
 import lib.repos.ClientAlbumRepo;
 
+import javax.sound.midi.SysexMessage;
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -10,9 +11,6 @@ public class App {
 
     public static void main(String[] args) throws Exception {
 
-        Scanner input = new Scanner(System.in);
-        o3(input);
-        /*
         Scanner input = new Scanner(System.in);
         int selection = 0;
 
@@ -32,20 +30,25 @@ public class App {
             System.out.println("10 - Delete Artist");
             System.out.println("-2 - Quit");
 
+            System.out.print("Enter Option: ");
             try {
                 selection = input.nextInt();
             }catch (Exception e){
                 selection = 1000;
             }
 
-            handle(selection);
-
+            try {
+                if(selection != -2)
+                    handle(selection);
+            }catch (Exception e){
+                System.out.println("*** Action Failed ***");
+            }
         }while(selection != -2);
-*/
+
 
     }
 
-    public static void handle(int selection, Scanner input) throws Exception {
+    public static void handle(int selection) throws Exception {
         switch (selection) {
             case 1:
                 o1();
@@ -54,7 +57,7 @@ public class App {
                 o2();
                 break;
             case 3:
-                o3(input);
+                o3();
                 break;
             case 4:
                 o4();
@@ -84,18 +87,48 @@ public class App {
     }
 
     public static void o1() throws Exception {
-        repo.listAlbums();
+        String response = repo.listAlbums();
+        System.out.println(response + "\n\n");
     }
-    public static void o2(){ }
-    public static void o3(Scanner input) throws IOException {
-        System.out.println("Enter Album info (format) :    isrc; title; des; year;");
+    public static void o2() throws Exception {
+        Scanner input = new Scanner(System.in);
+        System.err.println("Enter Album isrc");
+        String id = input.nextLine();
+        String response = repo.getAlbum(id);
+        System.out.println(response);
+    }
+    public static void o3() throws IOException {
+        System.err.println("Enter Album info (format) :    isrc; title; des; year;");
 
-        //String inputStr = input.nextLine();
-        String[] entries = "aa;bb;cc;12".split(";");//inputStr.split(";");
-        repo.add(entries);
+        Scanner input = new Scanner(System.in);
+        String inputStr = input.nextLine();
+        String[] entries = inputStr.split(";");
+        String response = repo.add(entries);
+        System.out.println(response);
+
     }
-    public static void o4(){ }
-    public static void o5(){ }
+    public static void o4() throws IOException {
+        System.err.println("Enter new values for albums (set desired isrc) :    isrc; title; des; year;");
+
+        Scanner input = new Scanner(System.in);
+        String inputStr = input.nextLine();
+        String[] entries = inputStr.split(";");
+        String response = repo.edit(entries);
+        System.out.println(response);
+    }
+    public static void o5() throws IOException {
+        System.err.println("Enter Album isrc to delete");
+        Scanner input = new Scanner(System.in);
+        String id = input.nextLine();
+        String response = repo.delete(id);
+        System.out.println(response);
+    }
+
+
+
+
+
+
     public static void o6(){ }
     public static void o7(){ }
     public static void o8(){ }

@@ -20,7 +20,7 @@ public class ClientAlbumRepo {
     }
 
     public String listAlbums() throws Exception {
-        String url = this.url;
+        String url = this.url + "/all";
         String response = this.httpClient.get(url);
         return response;
     }
@@ -38,14 +38,17 @@ public class ClientAlbumRepo {
         return response;
     }
 
-    public String edit(Album a){
-        return "";
+    public String edit(String[] input) throws IOException {
+        String str = "{ \"isrc\": \"%s\", \"title\": \"%s\", \"description\": \"%s\", \"year\": %s }";
+        String payload = String.format(str, input[0], input[1], input[2], input[3]);
+        String response = this.httpClient.postJson(url, payload);
+        return response;
     }
 
-    public String delete(String id){
-        return "";
+    public String delete(String isrc) throws IOException {
+        String url = this.url + "/" + isrc;
+        String response = this.httpClient.delete(url);
+        return response;
     }
-
-
 
 }
