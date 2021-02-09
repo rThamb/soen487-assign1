@@ -1,5 +1,6 @@
 import lib.models.Album;
 import lib.repos.ClientAlbumRepo;
+import lib.repos.ClientArtistRepo;
 
 import javax.sound.midi.SysexMessage;
 import java.io.IOException;
@@ -8,6 +9,7 @@ import java.util.Scanner;
 public class App {
 
     private static ClientAlbumRepo repo = new ClientAlbumRepo();
+    private static ClientArtistRepo artistRepo = new ClientArtistRepo();
 
     public static void main(String[] args) throws Exception {
 
@@ -24,9 +26,9 @@ public class App {
             System.out.println("5 - Delete Album");
             System.out.println("");
             System.out.println("6 - List artists");
-            System.out.println("7 - Get artists details");
-            System.out.println("8 - Add Artists");
-            System.out.println("9 - Update artists");
+            System.out.println("7 - Get artist details");
+            System.out.println("8 - Add Artist");
+            System.out.println("9 - Update artist");
             System.out.println("10 - Delete Artist");
             System.out.println("-2 - Quit");
 
@@ -123,16 +125,38 @@ public class App {
         String response = repo.delete(id);
         System.out.println(response);
     }
-
-
-
-
-
-
-    public static void o6(){ }
-    public static void o7(){ }
-    public static void o8(){ }
-    public static void o9(){ }
-    public static void o10(){ }
-
+    public static void o6() throws Exception{
+        String response = artistRepo.listArtists();
+        System.out.println(response + "\n\n");
+    }
+    public static void o7() throws IOException{
+        Scanner input = new Scanner(System.in);
+        System.err.println("Enter Artist nickname to retrieve details: ");
+        String inputStr = input.nextLine();
+        String response = artistRepo.getArtist(inputStr);
+        System.out.println(response + "\n");
+    }
+    public static void o8() throws IOException {
+        Scanner input = new Scanner(System.in);
+        System.err.println("Enter Artist info (format):    nickname; first name; last name; bio;");
+        String inputStr = input.nextLine();
+        String[] entries = inputStr.split(";");
+        String response = artistRepo.add(entries);
+        System.out.println(response + "\n");
+    }
+    public static void o9() throws IOException{
+        Scanner input = new Scanner(System.in);
+        System.err.println("Update info for artist (use existing nickname):    nickname; first name; last name; bio;");
+        String inputStr = input.nextLine();
+        String[] entries = inputStr.split(";");
+        String response = artistRepo.edit(entries);
+        System.out.println(response + "\n");
+    }
+    public static void o10() throws IOException{
+        Scanner input = new Scanner(System.in);
+        System.err.println("Enter Artist nickname to delete: ");
+        String inputStr = input.nextLine();
+        String response = artistRepo.delete(inputStr);
+        System.out.println(response + "\n");
+    }
 }
