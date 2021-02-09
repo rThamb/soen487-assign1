@@ -16,6 +16,8 @@ assign1_impl/assign1_impl.iml
 SOEN487_Assign1/.idea/
 SOEN487_Assign1/target/
 SOEN487_Assign1/soen487.iml
+SOEN487_Assign1/assign1_rest_api.iml
+
 
 #client
 client/.idea/

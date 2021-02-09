@@ -99,7 +99,7 @@ public class App {
         String response = repo.getAlbum(id);
         System.out.println(response);
     }
-    public static void o3() throws IOException {
+    public static void o3() throws Exception {
         System.err.println("Enter Album info (format) :    isrc; title; des; year;");
 
         Scanner input = new Scanner(System.in);
@@ -109,7 +109,7 @@ public class App {
         System.out.println(response);
 
     }
-    public static void o4() throws IOException {
+    public static void o4() throws Exception {
         System.err.println("Enter new values for albums (set desired isrc) :    isrc; title; des; year;");
 
         Scanner input = new Scanner(System.in);
@@ -118,7 +118,7 @@ public class App {
         String response = repo.edit(entries);
         System.out.println(response);
     }
-    public static void o5() throws IOException {
+    public static void o5() throws Exception {
         System.err.println("Enter Album isrc to delete");
         Scanner input = new Scanner(System.in);
         String id = input.nextLine();
@@ -129,14 +129,14 @@ public class App {
         String response = artistRepo.listArtists();
         System.out.println(response + "\n\n");
     }
-    public static void o7() throws IOException{
+    public static void o7() throws Exception{
         Scanner input = new Scanner(System.in);
         System.err.println("Enter Artist nickname to retrieve details: ");
         String inputStr = input.nextLine();
         String response = artistRepo.getArtist(inputStr);
         System.out.println(response + "\n");
     }
-    public static void o8() throws IOException {
+    public static void o8() throws Exception {
         Scanner input = new Scanner(System.in);
         System.err.println("Enter Artist info (format):    nickname; first name; last name; bio;");
         String inputStr = input.nextLine();
@@ -144,7 +144,7 @@ public class App {
         String response = artistRepo.add(entries);
         System.out.println(response + "\n");
     }
-    public static void o9() throws IOException{
+    public static void o9() throws Exception{
         Scanner input = new Scanner(System.in);
         System.err.println("Update info for artist (use existing nickname):    nickname; first name; last name; bio;");
         String inputStr = input.nextLine();
@@ -152,7 +152,7 @@ public class App {
         String response = artistRepo.edit(entries);
         System.out.println(response + "\n");
     }
-    public static void o10() throws IOException{
+    public static void o10() throws Exception{
         Scanner input = new Scanner(System.in);
         System.err.println("Enter Artist nickname to delete: ");
         String inputStr = input.nextLine();

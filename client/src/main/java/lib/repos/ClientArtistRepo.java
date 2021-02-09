@@ -15,20 +15,20 @@ public class ClientArtistRepo {
         this.httpClient = new MyHttpClient();
     }
 
-    public String listArtists() throws IOException {
+    public String listArtists() throws Exception {
         String url = this.url;
         String response = this.httpClient.get(url);
         return response;
     }
 
-    public String getArtist(String nickname) throws IOException {
+    public String getArtist(String nickname) throws Exception {
         String url = this.url + "?nickname=" + nickname;
         String response = this.httpClient.get(url);
         return response;
     }
 
 
-    public String add(String[] input) throws IOException {
+    public String add(String[] input) throws Exception {
         String[] keys = {"nickname", "firstname", "lastname", "bio"};
         HashMap payload = new HashMap();
 
@@ -40,7 +40,7 @@ public class ClientArtistRepo {
         return response;
     }
 
-    public String edit(String[] input) throws IOException{
+    public String edit(String[] input) throws Exception{
         String[] keys = {"nickname", "firstname", "lastname", "bio"};
         HashMap payload = new HashMap();
 
@@ -52,7 +52,7 @@ public class ClientArtistRepo {
         return response;
     }
 
-    public String delete(String nickname) throws IOException{
+    public String delete(String nickname) throws Exception{
         String url = this.url + "?nickname=" + nickname;
         String response = this.httpClient.delete(url);
         return response;

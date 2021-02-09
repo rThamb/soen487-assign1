@@ -13,7 +13,7 @@ import java.util.List;
 public class ClientAlbumRepo {
 
     private MyHttpClient httpClient;
-    private String url = "http://localhost:8080/api/album";
+    private String url = "http://localhost:8081/api/album";
 
     public ClientAlbumRepo(){
         this.httpClient = new MyHttpClient();
@@ -31,21 +31,21 @@ public class ClientAlbumRepo {
         return response;
     }
 
-    public String add(String[] input) throws IOException {
+    public String add(String[] input) throws Exception {
         String str = "{ \"isrc\": \"%s\", \"title\": \"%s\", \"description\": \"%s\", \"year\": %s }";
         String payload = String.format(str, input[0], input[1], input[2], input[3]);
         String response = this.httpClient.putJson(url, payload);
         return response;
     }
 
-    public String edit(String[] input) throws IOException {
+    public String edit(String[] input) throws Exception {
         String str = "{ \"isrc\": \"%s\", \"title\": \"%s\", \"description\": \"%s\", \"year\": %s }";
         String payload = String.format(str, input[0], input[1], input[2], input[3]);
         String response = this.httpClient.postJson(url, payload);
         return response;
     }
 
-    public String delete(String isrc) throws IOException {
+    public String delete(String isrc) throws Exception {
         String url = this.url + "/" + isrc;
         String response = this.httpClient.delete(url);
         return response;

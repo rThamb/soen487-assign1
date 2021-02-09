@@ -25,13 +25,13 @@ import org.apache.http.client.utils.URIBuilder;
 
 //https://mkyong.com/java/apache-httpclient-examples/
 public class MyHttpClient {
-    public String get(String url) throws IOException {
-        HttpGet request = new HttpGet(url);
+    public String get(String url) throws Exception {
+        HttpGet request = new HttpGet(encode(url));
         return send(request);
     }
 
-    public String put(String url, HashMap<String, String> payload) throws IOException {
-        HttpPut putRequest = new HttpPut(url);
+    public String put(String url, HashMap<String, String> payload) throws Exception {
+        HttpPut putRequest = new HttpPut(encode(url));
 
         //request parameters for put
         List<NameValuePair> urlParameters = new ArrayList<>();
@@ -44,7 +44,7 @@ public class MyHttpClient {
         }
 
         //set parameters as given from payload
-        putRequest.setEntity(new UrlEncodedFormEntity(urlParameters));
+        putRequest.setEntity(new UrlEncodedFormEntity(urlParameters,"UTF-8"));
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault();
              CloseableHttpResponse response = httpClient.execute(putRequest)){
@@ -53,8 +53,8 @@ public class MyHttpClient {
         }
     }
 
-    public String post(String url, HashMap<String, String> payload) throws IOException{
-        HttpPost postRequest = new HttpPost(url);
+    public String post(String url, HashMap<String, String> payload) throws Exception{
+        HttpPost postRequest = new HttpPost(encode(url));
 
         //request parameters for post
         List<NameValuePair> urlParameters = new ArrayList<>();
@@ -67,7 +67,7 @@ public class MyHttpClient {
         }
 
         //set parameters as given from payload
-        postRequest.setEntity(new UrlEncodedFormEntity(urlParameters));
+        postRequest.setEntity(new UrlEncodedFormEntity(urlParameters, "UTF-8"));
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault();
              CloseableHttpResponse response = httpClient.execute(postRequest)){
@@ -76,8 +76,8 @@ public class MyHttpClient {
         }
     }
 
-    public String delete(String url) throws IOException{
-        HttpDelete request = new HttpDelete(url);
+    public String delete(String url) throws Exception{
+        HttpDelete request = new HttpDelete(encode(url));
         return send(request);
     }
 
@@ -107,28 +107,28 @@ public class MyHttpClient {
             return "";
     }
 
-    public String putJson(String url, String jsonData) throws IOException {
+    public String putJson(String url, String jsonData) throws Exception {
         StringEntity requestEntity = new StringEntity(
                 jsonData,
                 ContentType.APPLICATION_JSON);
 
-        HttpPut putMethod = new HttpPut(url);
+        HttpPut putMethod = new HttpPut(encode(url));
         putMethod.setEntity(requestEntity);
         return send(putMethod);
     }
 
-    public String postJson(String url, String jsonData) throws IOException {
+    public String postJson(String url, String jsonData) throws Exception {
         StringEntity requestEntity = new StringEntity(
                 jsonData,
                 ContentType.APPLICATION_JSON);
 
-        HttpPost postMethod = new HttpPost(url);
+        HttpPost postMethod = new HttpPost(encode(url));
         postMethod.setEntity(requestEntity);
 
         return send(postMethod);
     }
 
-    private String encode(String urlStr) throws MalformedURLException, URISyntaxException {
+    private static String encode(String urlStr) throws MalformedURLException, URISyntaxException {
         URL url= new URL(urlStr);
         URI uri = new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef());
         return uri.toASCIIString();
