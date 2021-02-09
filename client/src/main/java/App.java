@@ -37,6 +37,7 @@ public class App {
                 selection = input.nextInt();
             }catch (Exception e){
                 selection = 1000;
+                input.nextLine();
             }
 
             try {
