@@ -39,13 +39,13 @@ public class AlbumDAO implements AlbumRepo {
     }
 
     @Override
-    public void add(Album a) {
+    public synchronized void add(Album a) {
         if(a != null)
             this.albums.add(a);
     }
 
     @Override
-    public void update(Album a) {
+    public synchronized void update(Album a) {
 
         //remove based on ID
         this.albums.remove(a);
@@ -55,7 +55,7 @@ public class AlbumDAO implements AlbumRepo {
     }
 
     @Override
-    public void delete(String isrc) {
+    public synchronized void delete(String isrc) {
         Album a = new Album();
         a.setIsrc(isrc);
         this.albums.remove(a);

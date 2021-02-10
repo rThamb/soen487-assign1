@@ -39,13 +39,13 @@ public class ArtistDAO implements ArtistRepo {
     }
 
     @Override
-    public void add(Artist a) {
+    public synchronized void add(Artist a) {
         if(a != null)
             this.artists.add(a);
     }
 
     @Override
-    public void update(Artist a) {
+    public synchronized void update(Artist a) {
         //remove based on ID
         this.artists.remove(a);
 
@@ -54,7 +54,7 @@ public class ArtistDAO implements ArtistRepo {
     }
 
     @Override
-    public void delete(String nickname) {
+    public synchronized void delete(String nickname) {
         Artist a = new Artist();
         a.setNickname(nickname);
         this.artists.remove(a);
