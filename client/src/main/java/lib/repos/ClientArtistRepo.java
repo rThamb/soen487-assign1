@@ -6,7 +6,7 @@ import java.util.HashMap;
 public class ClientArtistRepo {
 
     private MyHttpClient httpClient;
-    private String url = "http://localhost:8080/artist_servlet_war_exploded/artist";
+    private String url = "http://localhost:8080/artist_servlet_war/artist";
 
     public ClientArtistRepo(){
         this.httpClient = new MyHttpClient();
