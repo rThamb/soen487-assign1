@@ -7,11 +7,11 @@ import java.util.Properties;
 
 public class DBConnection {
 
-    private String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
-    private String DB_URL = "jdbc:mysql://localhost:3306/";
-    private String DB_NAME = "soen_387";
-    private String DB_USER = "root";
-    private String DB_PASSWORD = "";
+    private String JDBC_DRIVER;
+    private String DB_URL;
+    private String DB_NAME;
+    private String DB_USER;
+    private String DB_PASSWORD;
     static Connection conn = null;
 
 

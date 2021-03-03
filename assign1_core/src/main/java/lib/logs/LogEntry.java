@@ -1,22 +1,31 @@
 package lib.logs;
 
 import javax.xml.bind.annotation.XmlRootElement;
-import java.sql.Time;
+import java.sql.Date;
 
 @XmlRootElement
 public class LogEntry {
 
-    private Time timestamp;
+    private Date timestamp;
     private String type;
+    private String isrc;
 
     public LogEntry(){
     }
 
-    public Time getTimestamp() {
+    public String getIsrc() {
+        return isrc;
+    }
+
+    public void setIsrc(String isrc) {
+        this.isrc = isrc;
+    }
+
+    public Date getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(Time timestamp) {
+    public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
     }
 

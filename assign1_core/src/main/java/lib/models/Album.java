@@ -12,6 +12,7 @@ public class Album implements Serializable {
     private int year;
     private Artist artist;
     private byte[] coverImage;
+    private String mimeType;
 
     public Album(){}
 
@@ -23,6 +24,7 @@ public class Album implements Serializable {
         if(a.artist != null)
             this.artist = new Artist(a.artist);
         this.coverImage = a.coverImage;
+        this.mimeType = a.mimeType;
     }
 
     public byte[] getCoverImage() {
@@ -30,6 +32,14 @@ public class Album implements Serializable {
     }
     public void setCoverImage(byte[] coverImage) {
         this.coverImage = coverImage;
+    }
+
+    public String getMimeType() {
+        return mimeType;
+    }
+
+    public void setMimeType(String mimeType) {
+        this.mimeType = mimeType;
     }
 
     public String getIsrc() {
