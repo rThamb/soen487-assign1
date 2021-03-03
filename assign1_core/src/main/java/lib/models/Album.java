@@ -11,6 +11,7 @@ public class Album implements Serializable {
     private String description;
     private int year;
     private Artist artist;
+    private byte[] coverImage;
 
     public Album(){}
 
@@ -21,6 +22,14 @@ public class Album implements Serializable {
         this.year = a.year;
         if(a.artist != null)
             this.artist = new Artist(a.artist);
+        this.coverImage = a.coverImage;
+    }
+
+    public byte[] getCoverImage() {
+        return coverImage;
+    }
+    public void setCoverImage(byte[] coverImage) {
+        this.coverImage = coverImage;
     }
 
     public String getIsrc() {

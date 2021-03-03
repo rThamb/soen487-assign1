@@ -1,5 +1,6 @@
 package lib.repos;
 
+import lib.logs.LogEntry;
 import lib.models.Artist;
 
 import java.util.List;
