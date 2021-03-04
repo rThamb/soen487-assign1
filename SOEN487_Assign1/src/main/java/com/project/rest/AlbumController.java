@@ -1,5 +1,6 @@
 package com.project.rest;
 
+import com.sun.jersey.multipart.FormDataParam;
 import impl.factory.AlbumDBRepoFactory;
 import impl.factory.AlbumRepoFactory;
 import lib.models.Album;
@@ -103,5 +104,11 @@ public class AlbumController {
         }
     }
 
+    @POST
+    @Path("/upload/{isrc}")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public String uploadFile(@FormDataParam("coverImage") InputStream inputStream, @PathParam("isrc") String isrc){
+        return "";
+    }
 
 }
