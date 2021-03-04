@@ -32,6 +32,7 @@ public class Sandbox {
         a.setTitle("EDITTED TITLE");
         aDB.update(a);
         aDB.readLogs();
+        aDB.delete(a.getIsrc());
 
         return;
     }

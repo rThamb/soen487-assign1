@@ -4,8 +4,8 @@ import impl.database.DBConnection;
 import lib.logs.LogEntry;
 import lib.models.Album;
 import lib.models.Artist;
-import lib.repos.AlbumRepo;
 import lib.repos.LogRepo;
+import lib.repos.db.AlbumRepo;
 
 import java.sql.*;
 import java.time.LocalTime;
@@ -14,10 +14,12 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Properties;
 
-public class AlbumDAO {
+
+
+public class AlbumDAO implements AlbumRepo, LogRepo{
 
     private DBConnection connectionCenter;
-    private static String ADD_TAG = "ADD";
+    private static String ADD_TAG = "CREATE";
     private static String UPDATE_TAG = "UPDATE";
     private static String DELETE_TAG = "DELETE";
 

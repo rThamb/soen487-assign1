@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface LogRepo {
 
-    List<LogEntry> readLogs();
+    List<LogEntry> readLogs() throws Exception;
 
-    void clearLogs();
+    void clearLogs() throws Exception;
 }
