@@ -15,4 +15,7 @@ public interface AlbumRepo {
     void update(Album a) throws Exception;
 
     void delete(String isrc) throws Exception;
+
+    void editImage(Album a) throws Exception;
+
 }

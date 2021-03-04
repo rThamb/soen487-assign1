@@ -120,7 +120,7 @@ public class AlbumDAO implements AlbumRepo, LogRepo{
 
     public void update(Album a) throws SQLException {
         String query = "UPDATE t_album\n" +
-                "SET title=?, description=?, year_released=?, artist_first_name=?, artist_last_name=?, cover=?, media_type=?\n" +
+                "SET title=?, description=?, year_released=?, artist_first_name=?, artist_last_name=? \n" +
                 "WHERE isrc = ?";
 
         try(Connection con = getConnection();) {
@@ -130,9 +130,7 @@ public class AlbumDAO implements AlbumRepo, LogRepo{
             ps.setString(3,a.getYear() + "");
             ps.setString(4,a.getArtist().getFirstname());
             ps.setString(5,a.getArtist().getLastname());
-            ps.setBytes(6,a.getCoverImage());
-            ps.setString(7,a.getMimeType());
-            ps.setString(8,a.getIsrc());
+            ps.setString(6,a.getIsrc());
 
             int i = ps.executeUpdate();
 
@@ -161,6 +159,29 @@ public class AlbumDAO implements AlbumRepo, LogRepo{
                 throw new SQLException("No ROWS were Affected.");
         }
         enterLog(isrc, DELETE_TAG);
+    }
+
+    @Override
+    public void editImage(Album album) throws SQLException {
+
+        String query = "UPDATE t_album\n" +
+                "SET cover=?, media_type=? \n" +
+                "WHERE isrc = ?";
+
+        try(Connection con = getConnection();) {
+            PreparedStatement ps = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            ps.setBytes(1, album.getCoverImage());
+            ps.setString(2, album.getMimeType());
+            ps.setString(3, album.getIsrc());
+
+            int i = ps.executeUpdate();
+
+            if(i == 1) {
+                System.out.println("Successful: Updated album");
+            }else
+                throw new SQLException("No ROWS were Affected.");
+        }
+        enterLog(album.getIsrc(), UPDATE_TAG);
     }
 
 
