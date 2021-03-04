@@ -1,5 +1,6 @@
 package com.project.soap.service;
 
+import lib.exception.RepException;
 import lib.logs.LogEntry;
 
 import javax.jws.WebMethod;
@@ -13,6 +14,9 @@ import java.util.List;
 public interface LogService {
 
     @WebMethod
-    List<LogEntry> getLogs(Date startDate, Date endDate, String changeType) throws Exception;
+    List<LogEntry> getLogs(Date startDate, Date endDate, String changeType) throws RepException;
+
+    @WebMethod
+    void clearLogs() throws RepException;
 
 }

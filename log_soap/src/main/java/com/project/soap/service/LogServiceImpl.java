@@ -1,6 +1,7 @@
 package com.project.soap.service;
 
 import impl.dao.db.AlbumDAO;
+import lib.exception.RepException;
 import lib.logs.LogEntry;
 
 import javax.jws.WebService;
@@ -14,12 +15,18 @@ import java.util.Properties;
 public class LogServiceImpl implements LogService{
 
     @Override
-    public List<LogEntry> getLogs(Date startDate, Date endDate, String changeType) throws Exception{
-        InputStream input = new FileInputStream("config/config.properties");
-        Properties prop = new Properties();
-        prop.load(input);
-        AlbumDAO dao = new AlbumDAO(prop);
-        List<LogEntry> logs = dao.readLogs();
+    public List<LogEntry> getLogs(Date startDate, Date endDate, String changeType) throws RepException{
+        List<LogEntry> logs;
+
+        try {
+            InputStream input = new FileInputStream("config/config.properties");
+            Properties prop = new Properties();
+            prop.load(input);
+            AlbumDAO dao = new AlbumDAO(prop);
+            logs = dao.readLogs();
+        }catch(Exception e){
+            throw new RepException("Operation failed.");
+        }
 
         if(!changeType.equals("") && changeType != null){
             logs.removeIf(log -> !log.getType().equals(changeType));
@@ -31,6 +38,11 @@ public class LogServiceImpl implements LogService{
             logs.removeIf(log -> log.getTimestamp().after(endDate));
         }
         return logs;
+    }
+
+    @Override
+    public void clearLogs() throws RepException {
+        throw new RepException("Method not yet supported.");
     }
 
 }
