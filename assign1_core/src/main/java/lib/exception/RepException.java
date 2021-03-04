@@ -1,7 +1,9 @@
 package lib.exception;
 
 
-public class RepException extends Exception{
+import lib.web.JSONifiable;
+
+public class RepException extends Exception {
 
     public RepException(){
         super();

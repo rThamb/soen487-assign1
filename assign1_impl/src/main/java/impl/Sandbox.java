@@ -26,6 +26,7 @@ public class Sandbox {
 
         Album a = new Album();
         a.setIsrc("1532");
+
         a.setYear(2009);
         Artist ar = new Artist();
         ar.setFirstname("Dim");
@@ -36,9 +37,9 @@ public class Sandbox {
         a.setTitle("EDITTED TITLE");
         aDB.update(a);
 
+
         //image stuff
         File f = new File("config/config.properties");
-
         byte[] binary = Files.readAllBytes(f.toPath());
         String mime = "png";
 
@@ -50,9 +51,9 @@ public class Sandbox {
         a.setTitle("EDIT AFTER IMG EXIST");
         aDB.update(a);
 
-        a.setCoverImage(null);
-        a.setMimeType(null);
-        aDB.editImage(a);
+        //a.setCoverImage(null);
+        //a.setMimeType(null);
+        //aDB.editImage(a);
 
         aDB.readLogs();
         aDB.delete(a.getIsrc());

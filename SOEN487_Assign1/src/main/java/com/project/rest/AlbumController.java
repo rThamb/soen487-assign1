@@ -1,17 +1,19 @@
 package com.project.rest;
 
+import com.project.rest.responses.AlbumCollection;
+import com.project.rest.responses.Message;
+import com.project.rest.responses.WebError;
 import com.sun.jersey.multipart.FormDataParam;
 import impl.factory.AlbumDBRepoFactory;
-import impl.factory.AlbumRepoFactory;
+import lib.exception.RepException;
 import lib.models.Album;
 import lib.repos.db.AlbumRepo;
+import lib.web.JSONifiable;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import javax.ws.rs.core.Response;
+import java.io.*;
 import java.util.List;
 import java.util.Properties;
 
@@ -38,69 +40,70 @@ public class AlbumController {
     }
 
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("all")
-    public String getAlbums() {
+    public Response getAlbums() throws RepException{
         try {
             List<Album> albums = repo.readAll();
-
-            StringBuilder sb = new StringBuilder();
-            for (Album a : albums) {
-                sb.append(a.toString() + "\n\n");
-            }
-            return sb.toString();
+            //returning binary data breaks endpoint response
+            for(Album a: albums)
+                a.setCoverImage(null);
+            return albumCollectionResponse(albums);
         }catch (Exception e){
-            return "Failed operations";
+           return errorResponse(e);
         }
     }
 
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("{isrc}")
-    public String getDetails(@PathParam("isrc") String isrc) {
+    public Response getDetails(@PathParam("isrc") String isrc) {
         try {
             Album a = repo.read(isrc);
-            return a.toString();
+
+            //error when binary array present
+            a.setCoverImage(null);
+            return albumResponse(a);
         }catch (Exception e){
-            return "Operation Failed.";
+            return errorResponse(e);
         }
     }
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.TEXT_PLAIN)
-    public String addAlbum(Album album) {
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response addAlbum(Album album) {
 
         try {
             this.repo.add(album);
-            return "New Album added";
+            return successOperation("New Album added");
         }catch (Exception e){
-            return "Operation Failed.";
+            return errorResponse(e);
         }
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.TEXT_PLAIN)
-    public String editAlbum(Album album){
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response editAlbum(Album album){
 
         try {
             this.repo.update(album);
-            return "Updated album";
+            return successOperation("Updated album");
         }catch (Exception e){
-            return "Operation Failed.";
+            return errorResponse(e);
         }
     }
 
     @DELETE
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("{isrc}")
-    public String deleteAlbum(@PathParam("isrc") String isrc) {
+    public Response deleteAlbum(@PathParam("isrc") String isrc) {
         try {
             this.repo.delete(isrc);
-            return "Deleted album";
+            return successOperation("Deleted album");
         }catch (Exception e){
-            return "Operation Failed.";
+            return errorResponse(e);
         }
     }
 
@@ -110,5 +113,23 @@ public class AlbumController {
     public String uploadFile(@FormDataParam("coverImage") InputStream inputStream, @PathParam("isrc") String isrc){
         return "";
     }
+
+    private Response errorResponse(Exception e){
+        WebError error = new WebError("RepException", "Failed Operation: \n\n" + e.getMessage());
+        return Response.status(200).entity(error).build();
+    }
+
+    private Response albumCollectionResponse(List<Album> a){
+        return Response.status(200).entity(new AlbumCollection(a)).build();
+    }
+
+    private Response albumResponse(Album a){
+        return Response.status(200).entity(a).build();
+    }
+
+    private Response successOperation(String mes){
+        return Response.status(200).entity(new Message(mes)).build();
+    }
+
 
 }

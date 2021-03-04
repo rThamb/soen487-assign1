@@ -1,10 +1,12 @@
 package lib.models;
 
+import lib.web.JSONifiable;
+
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 
 @XmlRootElement
-public class Album implements Serializable {
+public class Album implements Serializable, JSONifiable {
 
     private String isrc;
     private String title;
