@@ -1,30 +1,56 @@
 package com.project.rest;
 
+import impl.factory.AlbumDBRepoFactory;
 import impl.factory.AlbumRepoFactory;
 import lib.models.Album;
-import lib.repos.AlbumRepo;
+import lib.repos.db.AlbumRepo;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
+import java.util.Properties;
 
 
 @Path("album")
 public class AlbumController {
 
-    private AlbumRepo repo = AlbumRepoFactory.getInstance();
+    private static AlbumRepo repo = setup();
+
+    private static AlbumRepo setup(){
+        InputStream input = null;
+        try {
+            input = new FileInputStream("config/config.properties");
+            Properties prop = new Properties();
+            prop.load(input);
+            return AlbumDBRepoFactory.getInstance(prop);
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     @Path("all")
     public String getAlbums() {
-        List<Album> albums = repo.readAll();
+        try {
+            List<Album> albums = repo.readAll();
 
-        StringBuilder sb = new StringBuilder();
-        for(Album a: albums){
-            sb.append(a.toString() + "\n\n");
+            StringBuilder sb = new StringBuilder();
+            for (Album a : albums) {
+                sb.append(a.toString() + "\n\n");
+            }
+            return sb.toString();
+        }catch (Exception e){
+            return "Failed operations";
         }
-        return sb.toString();
     }
 
     @GET
