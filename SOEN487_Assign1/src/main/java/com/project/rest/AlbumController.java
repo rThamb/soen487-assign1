@@ -11,6 +11,8 @@ import lib.repos.db.AlbumRepo;
 import lib.web.JSONifiable;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.*;
@@ -106,13 +108,48 @@ public class AlbumController {
             return errorResponse(e);
         }
     }
+//
+//    @GET
+//    @Path("/upload/{isrc}")
+//    public void getFile(@PathParam("isrc") String isrc){
+//
+//    }
 
     @POST
     @Path("/upload/{isrc}")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public String uploadFile(@FormDataParam("coverImage") InputStream inputStream, @PathParam("isrc") String isrc){
-        return "";
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response uploadFile(@Context HttpHeaders headers, @FormDataParam("coverImage") InputStream inputStream, @PathParam("isrc") String isrc){
+        try {
+            byte[] binary = readFile(inputStream);
+            String mime = ".jpg";
+            Album a = new Album();
+            a.setIsrc(isrc);
+            a.setCoverImage(binary);
+            a.setMimeType(mime);
+            this.repo.editImage(a);
+            return successOperation("Uploaded image for " + isrc);
+
+        }catch (Exception e) {
+            return errorResponse(e);
+        }
     }
+
+//    @DELETE
+//    @Path("/upload/{isrc}")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public Response removeFile(@PathParam("isrc") String isrc){
+//        try {
+//            Album a = new Album();
+//            a.setIsrc(isrc);
+//            repo.editImage(a);
+//            return successOperation("Succesfully Deleted image for " + isrc);
+//        }catch (Exception e){
+//            return errorResponse(e);
+//        }
+//    }
+
+
 
     private Response errorResponse(Exception e){
         WebError error = new WebError("RepException", "Failed Operation: \n\n" + e.getMessage());
@@ -131,5 +168,8 @@ public class AlbumController {
         return Response.status(200).entity(new Message(mes)).build();
     }
 
+    private byte[] readFile(InputStream inputStream) throws IOException {
+        return new byte[inputStream.available()];
+    }
 
 }

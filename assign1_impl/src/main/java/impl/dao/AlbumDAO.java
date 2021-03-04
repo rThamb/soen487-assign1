@@ -62,5 +62,10 @@ public class AlbumDAO implements AlbumRepo {
         a.setIsrc(isrc);
         this.albums.remove(a);
     }
+
+    @Override
+    public void editImage(Album album) throws Exception {
+        throw new Exception("Not supported");
+    }
 }
 
