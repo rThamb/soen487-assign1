@@ -41,4 +41,4 @@ artist-servlet/artist-servlet.iml
 #log_soap
 log_soap/.idea/
 log_soap/target/
-log_soap/assign1_core.iml
+log_soap/log_soap.iml
