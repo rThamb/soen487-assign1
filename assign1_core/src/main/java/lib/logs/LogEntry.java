@@ -1,7 +1,7 @@
 package lib.logs;
 
 import javax.xml.bind.annotation.XmlRootElement;
-import java.sql.Date;
+import java.util.Date;
 
 @XmlRootElement
 public class LogEntry {

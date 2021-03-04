@@ -216,7 +216,7 @@ public class AlbumDAO {
             PreparedStatement ps = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, log.getType());
             ps.setString(2, log.getIsrc());
-            ps.setDate(3, log.getTimestamp());
+            ps.setDate(3, new Date(log.getTimestamp().getTime()));
 
             int i = ps.executeUpdate();
 
