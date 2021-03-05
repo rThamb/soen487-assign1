@@ -3,6 +3,7 @@ package com.project.rest;
 import com.project.rest.responses.AlbumCollection;
 import com.project.rest.responses.Message;
 import com.project.rest.responses.WebError;
+import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataParam;
 import impl.factory.AlbumDBRepoFactory;
 import lib.exception.RepException;
@@ -16,6 +17,7 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Properties;
 
@@ -121,7 +123,21 @@ public class AlbumController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response uploadFile(@Context HttpHeaders headers, @FormDataParam("coverImage") InputStream inputStream, @PathParam("isrc") String isrc){
         try {
-            byte[] binary = readFile(inputStream);
+            //byte[] binary = readFile(inputStream);
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+            int nRead;
+            byte[] data = new byte[1024];
+            while ((nRead = inputStream.read(data, 0, data.length)) != -1) {
+                buffer.write(data, 0, nRead);
+            }
+
+            buffer.flush();
+            buffer.close();
+            byte[] binary = buffer.toByteArray();
+           // String str = new String(binary, "Cp1252");
+           // str = str.substring(str.indexOf("\r\n\r\n"),str.lastIndexOf("------"));
+            //binary = str.trim().getBytes("Cp1252");
+
             String mime = ".jpg";
             Album a = new Album();
             a.setIsrc(isrc);
@@ -133,6 +149,26 @@ public class AlbumController {
         }catch (Exception e) {
             return errorResponse(e);
         }
+    }
+
+    @GET
+    @Path("/download/{isrc}")
+    public Response downloadFile(@Context HttpHeaders headers, @PathParam("isrc") String isrc){
+        Album album;
+
+        try {
+            album = repo.read(isrc);
+            try (FileOutputStream stream = new FileOutputStream("temp/"+ album.getTitle() + album.getMimeType())) {
+                stream.write(album.getCoverImage());
+            }
+        } catch (Exception e) {
+            return errorResponse(e);
+        }
+
+        File file = new File("temp/"+ album.getTitle() + album.getMimeType());
+        Response.ResponseBuilder response = Response.ok((Object) file);
+        response.header("Content-Disposition","attachment; filename=\"" + album.getTitle() + album.getMimeType() +"\"");
+        return response.build();
     }
 
 //    @DELETE
