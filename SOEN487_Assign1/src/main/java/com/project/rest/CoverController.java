@@ -49,7 +49,6 @@ public class CoverController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response uploadFile(@Context HttpHeaders headers, @FormDataParam("coverImage") InputStream inputStream, @PathParam("isrc") String isrc){
         try {
-            //byte[] binary = readFile(inputStream);
             ByteArrayOutputStream buffer = new ByteArrayOutputStream();
             int nRead;
             byte[] data = new byte[1024];
@@ -59,17 +58,22 @@ public class CoverController {
 
             buffer.flush();
             buffer.close();
-            
+
             byte[] binary = buffer.toByteArray();
             String str = new String(binary);
             int filenameIndex = str.indexOf("filename=\"");
             String filename = str.substring(filenameIndex + 10 ,str.indexOf("\"", filenameIndex + 10));
-            int filenameLength = filename.length();
+            String mimeType = filename.substring(filename.indexOf("."));
+            String header = str.substring(0, str.indexOf("\r\n\r\n"));
+            int headerLength = header.length();
+            int last = str.lastIndexOf("--");
+            String endStr = str.substring(str.lastIndexOf("--", last-2),last+2);
+            int endLength = endStr.length();
 
             int binSize = binary.length;
-            byte[] binaryContent = new byte[binSize-176-filenameLength];
-            int start = 134 + filenameLength;
-            int end = binSize - 44;
+            byte[] binaryContent = new byte[binSize-headerLength-endLength];
+            int start = headerLength + 4;
+            int end = binSize - endLength - 2;
             int counter = 0;
 
             for (int i = start; i < end; i++) {
@@ -77,11 +81,10 @@ public class CoverController {
                 counter++;
             }
 
-            String mime = ".jpg";
             Album a = new Album();
             a.setIsrc(isrc);
             a.setCoverImage(binaryContent);
-            a.setMimeType(mime);
+            a.setMimeType(mimeType);
             this.repo.editImage(a);
             return AlbumController.successOperation("Uploaded image for " + isrc);
 
