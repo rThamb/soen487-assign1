@@ -117,8 +117,7 @@ public class App {
         System.out.println(response);
     }
     public static void o3() throws Exception {
-        System.err.println("Enter Album info (format) :    isrc; title; des; year;");
-
+        System.err.println("Enter Album info (format) :    isrc; title; des; year;artistName (FORMAT: first,last)");
         Scanner input = new Scanner(System.in);
         String inputStr = input.nextLine();
         String[] entries = inputStr.split(";");
@@ -127,8 +126,7 @@ public class App {
 
     }
     public static void o4() throws Exception {
-        System.err.println("Enter new values for albums (set desired isrc) :    isrc; title; des; year;");
-
+        System.err.println("Enter new values for albums (set desired isrc) :    isrc; title; des; year;artistName (FORMAT: first,last)");
         Scanner input = new Scanner(System.in);
         String inputStr = input.nextLine();
         String[] entries = inputStr.split(";");

@@ -35,15 +35,21 @@ public class ClientAlbumRepo {
     }
 
     public String add(String[] input) throws Exception {
-        String str = "{ \"isrc\": \"%s\", \"title\": \"%s\", \"description\": \"%s\", \"year\": %s }";
-        String payload = String.format(str, input[0], input[1], input[2], input[3]);
+        String str = "{\"isrc\":\"%s\",\"title\":\"%s\",\"description\":\"%s\",\"year\":\"%s\",\"artist\":{\"firstname\":\"%s\",\"lastname\":\"%s\"}}";
+        String[] artist = input[4].split(",");
+        String artist_first = artist[0];
+        String artist_last = artist[1];
+        String payload = String.format(str, input[0], input[1], input[2], input[3], artist_first, artist_last);
         String response = this.httpClient.putJson(url, payload);
         return response;
     }
 
     public String edit(String[] input) throws Exception {
-        String str = "{ \"isrc\": \"%s\", \"title\": \"%s\", \"description\": \"%s\", \"year\": %s }";
-        String payload = String.format(str, input[0], input[1], input[2], input[3]);
+        String str = "{\"isrc\":\"%s\",\"title\":\"%s\",\"description\":\"%s\",\"year\":\"%s\",\"artist\":{\"firstname\":\"%s\",\"lastname\":\"%s\"}}";
+        String[] artist = input[4].split(",");
+        String artist_first = artist[0];
+        String artist_last = artist[1];
+        String payload = String.format(str, input[0], input[1], input[2], input[3], artist_first, artist_last);
         String response = this.httpClient.postJson(url, payload);
         return response;
     }
