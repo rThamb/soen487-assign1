@@ -63,11 +63,21 @@ public class CoverController {
            // String str = new String(binary, "Cp1252");
            // str = str.substring(str.indexOf("\r\n\r\n"),str.lastIndexOf("------"));
             //binary = str.trim().getBytes("Cp1252");
+            int binSize = binary.length;
+            byte[] binaryContent = new byte[binSize-183];
+            int start = 141;
+            int end = binSize - 44;
+            int counter = 0;
+
+            for (int i = start; i < end; i++) {
+                binaryContent[counter] = binary[i];
+                counter++;
+            }
 
             String mime = ".jpg";
             Album a = new Album();
             a.setIsrc(isrc);
-            a.setCoverImage(binary);
+            a.setCoverImage(binaryContent);
             a.setMimeType(mime);
             this.repo.editImage(a);
             return AlbumController.successOperation("Uploaded image for " + isrc);
