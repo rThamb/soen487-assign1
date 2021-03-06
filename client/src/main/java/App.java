@@ -186,11 +186,11 @@ public class App {
 
     public static void o11() throws Exception {
         Scanner input = new Scanner(System.in);
-        System.err.println("Enter Album isrc and filename (isrc;fileName) : (Ensure directory `album_attachments/{isrc}` holds .jpg file)");
+        System.err.println("Enter Album isrc and filename (isrc;fileName) : (Ensure directory `album_attachments/{isrc}` holds file)");
         String[] inputs = input.nextLine().split(";");
         String isrc = inputs[0];
         String filename = inputs[1];
-        String extension = ".jpg";
+        String extension = "";
         String filePath = String.format("album_attachments/%s/%s", isrc, filename + extension);
 
         File f = new File(filePath);
