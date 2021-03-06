@@ -1,5 +1,6 @@
 package lib.util;
 
+import org.apache.http.Consts;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -15,12 +16,8 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.io.*;
+import java.net.*;
 import java.util.*;
 import java.util.List;
 
@@ -158,6 +155,77 @@ public class MyHttpClient {
 
         httppost.setEntity(reqEntity);
         String response = send(httppost);
+        return response;
+    }
+
+    public String sendXML(String urlStr, String xmlPayload) throws Exception{
+/*
+        HttpEntity entity = new HttpEntity(xmlPayload, ContentType.create("text/xml", Consts.UTF_8));
+        new HttpEntity(xmlPayload, "text/xml");
+        HttpEntity reqEntity = E
+                .addPart("coverImage", bin)
+
+
+
+        HttpEntity request = RequestBuilder.
+
+
+        return "";
+
+*/
+
+        String request = xmlPayload;
+
+        URL url = new URL(urlStr);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+        // Set timeout as per needs
+        connection.setConnectTimeout(20000);
+        connection.setReadTimeout(20000);
+
+        // Set DoOutput to true if you want to use URLConnection for output.
+        // Default is false
+        connection.setDoOutput(true);
+
+        connection.setUseCaches(true);
+        connection.setRequestMethod("POST");
+
+        // Set Headers
+        connection.setRequestProperty("Accept", "application/xml");
+        connection.setRequestProperty("Content-Type", "application/xml");
+
+        // Write XML
+        OutputStream outputStream = connection.getOutputStream();
+        byte[] b = request.getBytes("UTF-8");
+        outputStream.write(b);
+        outputStream.flush();
+        outputStream.close();
+
+        // Read XML
+        InputStream inputStream = connection.getInputStream();
+        byte[] res = new byte[2048];
+        int i = 0;
+        StringBuilder response = new StringBuilder();
+        while ((i = inputStream.read(res)) != -1) {
+            response.append(new String(res, 0, i));
+        }
+        inputStream.close();
+
+        System.out.println("Response= " + response.toString());
+        return response.toString();
+    }
+
+    public String sendXMLV2(String url, String payload) throws IOException {
+
+        HttpPost postRequest = new HttpPost(url);
+
+        postRequest.addHeader("content-type", "application/xml");
+
+        StringEntity userEntity = new StringEntity(payload);
+        postRequest.setEntity(userEntity);
+
+        String response = send(postRequest);
+
         return response;
     }
 }

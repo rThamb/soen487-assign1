@@ -1,18 +1,22 @@
+import lib.client.LogEntry;
 import lib.models.Album;
 import lib.repos.ClientAlbumRepo;
 import lib.repos.ClientArtistRepo;
+import lib.repos.ClientLogRepo;
 
 import javax.sound.midi.SysexMessage;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.util.List;
 import java.util.Scanner;
 
 public class App {
 
     private static ClientAlbumRepo repo = new ClientAlbumRepo();
     private static ClientArtistRepo artistRepo = new ClientArtistRepo();
+    private static ClientLogRepo logRepo = new ClientLogRepo();
 
     public static void main(String[] args) throws Exception {
 
@@ -37,6 +41,8 @@ public class App {
             System.out.println("11 - Upload Cover Image for Album");
             System.out.println("12 - Download Cover Image for Album");
             System.out.println("13 - Delete Cover Image for Album");
+            System.out.println("");
+            System.out.println("14 - View Logs");
             System.out.println("-2 - Quit");
 
             System.out.print("Enter Option: ");
@@ -98,6 +104,9 @@ public class App {
                 break;
             case 13:
                 o13();
+                break;
+            case 14:
+                o14();
                 break;
             default:
                 System.out.println("Invalid option");
@@ -211,5 +220,20 @@ public class App {
         String isrc = input.nextLine();
         String response = repo.deleteFile(isrc);
         System.out.println(response + "\n");
+    }
+    public static void o14() throws Exception {
+        Scanner input = new Scanner(System.in);
+        System.err.println("Select to, from, type: (YYYY-MM-DD;YYYY-MM-DD; CREATE|UPDATE|DELETE)");
+        String[] inputs = input.nextLine().split(";");
+        List<LogEntry> logs = logRepo.getLogs(inputs[0], inputs[1], inputs[2]);
+
+        for(LogEntry l : logs){
+            System.out.println(logEntry(l));
+        }
+    }
+
+    private static String logEntry(LogEntry log){
+        String print = String.format("%s %s %s", log.getTimestamp().toString(), log.getIsrc(), log.getType());
+        return print;
     }
 }
