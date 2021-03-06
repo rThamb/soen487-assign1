@@ -59,13 +59,16 @@ public class CoverController {
 
             buffer.flush();
             buffer.close();
+            
             byte[] binary = buffer.toByteArray();
-           // String str = new String(binary, "Cp1252");
-           // str = str.substring(str.indexOf("\r\n\r\n"),str.lastIndexOf("------"));
-            //binary = str.trim().getBytes("Cp1252");
+            String str = new String(binary);
+            int filenameIndex = str.indexOf("filename=\"");
+            String filename = str.substring(filenameIndex + 10 ,str.indexOf("\"", filenameIndex + 10));
+            int filenameLength = filename.length();
+
             int binSize = binary.length;
-            byte[] binaryContent = new byte[binSize-183];
-            int start = 141;
+            byte[] binaryContent = new byte[binSize-176-filenameLength];
+            int start = 134 + filenameLength;
             int end = binSize - 44;
             int counter = 0;
 
