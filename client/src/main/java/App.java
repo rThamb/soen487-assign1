@@ -1,4 +1,5 @@
 import lib.client.LogEntry;
+import lib.exception.RepException;
 import lib.models.Album;
 import lib.repos.ClientAlbumRepo;
 import lib.repos.ClientArtistRepo;
@@ -43,6 +44,7 @@ public class App {
             System.out.println("13 - Delete Cover Image for Album");
             System.out.println("");
             System.out.println("14 - View Logs");
+            System.out.println("15 - Clear Logs");
             System.out.println("-2 - Quit");
 
             System.out.print("Enter Option: ");
@@ -107,6 +109,10 @@ public class App {
                 break;
             case 14:
                 o14();
+                break;
+            case 15:
+                System.err.println("Rep Exception: Not supported");
+                o15();
                 break;
             default:
                 System.out.println("Invalid option");
@@ -230,6 +236,9 @@ public class App {
         for(LogEntry l : logs){
             System.out.println(logEntry(l));
         }
+    }
+    public static void o15() throws Exception {
+        throw new RepException("Rep Exception: Not Supported");
     }
 
     private static String logEntry(LogEntry log){
