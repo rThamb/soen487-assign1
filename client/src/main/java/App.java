@@ -177,11 +177,21 @@ public class App {
 
     public static void o11() throws Exception {
         Scanner input = new Scanner(System.in);
-        System.err.println("Enter Album isrc and filename: (Ensure directory `album_attachments/{isrc}` contains your file)");
+        System.err.println("Enter Album isrc and filename (isrc;fileName) : (Ensure directory `album_attachments/{isrc}` holds .jpg file)");
         String[] inputs = input.nextLine().split(";");
-        String filePath = String.format("album_attachments/%s/%s", inputs[0], inputs[1]);
+        String isrc = inputs[0];
+        String filename = inputs[1];
+        String extension = ".jpg";
+        String filePath = String.format("album_attachments/%s/%s", isrc, filename + extension);
+
         File f = new File(filePath);
-        String response = repo.uploadFile(inputs[0], f);
+
+        if(!f.exists()){
+            System.out.println("CANNOT FIND .jpg for" + isrc);
+            throw new Exception();
+        }
+
+        String response = repo.uploadFile(isrc, f);
         System.out.println(response + "\n");
     }
 
