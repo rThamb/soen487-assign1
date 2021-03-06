@@ -5,7 +5,9 @@ import lib.util.MyHttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.mime.content.FileBody;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -14,6 +16,7 @@ public class ClientAlbumRepo {
 
     private MyHttpClient httpClient;
     private String url = "http://localhost:8081/api/album";
+    private String coverUrl = "http://localhost:8081/api/cover";
 
     public ClientAlbumRepo(){
         this.httpClient = new MyHttpClient();
@@ -50,5 +53,18 @@ public class ClientAlbumRepo {
         String response = this.httpClient.delete(url);
         return response;
     }
+
+    public String uploadFile(String isrc, File file) throws IOException {
+        String url = this.coverUrl + "/upload/" + isrc;
+        String response = httpClient.postMultipart(url, file);
+        return response;
+    }
+
+    public String deleteFile(String isrc) throws Exception {
+        String url = this.url + "/img/" + isrc;
+        String response = this.httpClient.delete(url);
+        return response;
+    }
+
 
 }

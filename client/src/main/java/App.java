@@ -3,7 +3,10 @@ import lib.repos.ClientAlbumRepo;
 import lib.repos.ClientArtistRepo;
 
 import javax.sound.midi.SysexMessage;
+import java.awt.*;
+import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.util.Scanner;
 
 public class App {
@@ -25,11 +28,15 @@ public class App {
             System.out.println("4 - Update Album");
             System.out.println("5 - Delete Album");
             System.out.println("");
-            System.out.println("6 - List artists");
-            System.out.println("7 - Get artist details");
-            System.out.println("8 - Add Artist");
-            System.out.println("9 - Update artist");
-            System.out.println("10 - Delete Artist");
+            //System.out.println("6 - List artists");
+            //System.out.println("7 - Get artist details");
+            //System.out.println("8 - Add Artist");
+            //System.out.println("9 - Update artist");
+            //System.out.println("10 - Delete Artist");
+            //System.out.println("");
+            System.out.println("11 - Upload Cover Image for Album");
+            System.out.println("12 - Download Cover Image for Album");
+            System.out.println("13 - Delete Cover Image for Album");
             System.out.println("-2 - Quit");
 
             System.out.print("Enter Option: ");
@@ -82,6 +89,15 @@ public class App {
                 break;
             case 10:
                 o10();
+                break;
+            case 11:
+                o11();
+                break;
+            case 12:
+                o12();
+                break;
+            case 13:
+                o13();
                 break;
             default:
                 System.out.println("Invalid option");
@@ -158,6 +174,34 @@ public class App {
         System.err.println("Enter Artist nickname to delete: ");
         String inputStr = input.nextLine();
         String response = artistRepo.delete(inputStr);
+        System.out.println(response + "\n");
+    }
+
+    public static void o11() throws Exception {
+        Scanner input = new Scanner(System.in);
+        System.err.println("Enter Album isrc and filename: (Ensure directory `album_attachments/{isrc}` contains your file)");
+        String[] inputs = input.nextLine().split(";");
+        String filePath = String.format("album_attachments/%s/%s", inputs[0], inputs[1]);
+        File f = new File(filePath);
+        String response = repo.uploadFile(inputs[0], f);
+        System.out.println(response + "\n");
+    }
+
+    public static void o12() throws Exception {
+        Scanner input = new Scanner(System.in);
+        System.err.println("Enter Album isrc");
+        String isrc = input.nextLine();
+
+        if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+            Desktop.getDesktop().browse(new URI("http://localhost:8081/api/album/download/" + isrc));
+        }
+    }
+
+    public static void o13() throws Exception {
+        Scanner input = new Scanner(System.in);
+        System.err.println("Enter Album isrc");
+        String isrc = input.nextLine();
+        String response = repo.deleteFile(isrc);
         System.out.println(response + "\n");
     }
 }

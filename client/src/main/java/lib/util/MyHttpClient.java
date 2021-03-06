@@ -1,22 +1,28 @@
 package lib.util;
 
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.*;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
+import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
+import java.util.List;
 
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.client.utils.URIBuilder;
@@ -133,5 +139,25 @@ public class MyHttpClient {
         URI uri = new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef());
         return uri.toASCIIString();
 
+    }
+
+    public String postMultipart(String url, File file) throws IOException {
+        HttpPost httppost = new HttpPost(url);
+
+        FileBody bin = null;
+
+        if(file != null)
+            bin = new FileBody(file);
+
+        //StringBody fields = new StringBody("", ContentType.TEXT_PLAIN);
+
+        HttpEntity reqEntity = MultipartEntityBuilder.create()
+                .addPart("coverImage", bin)
+                //.addPart("comment", comment)
+                .build();
+
+        httppost.setEntity(reqEntity);
+        String response = send(httppost);
+        return response;
     }
 }

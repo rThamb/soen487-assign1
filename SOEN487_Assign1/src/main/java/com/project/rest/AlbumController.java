@@ -117,40 +117,40 @@ public class AlbumController {
 //
 //    }
 
-    @POST
-    @Path("/upload/{isrc}")
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response uploadFile(@Context HttpHeaders headers, @FormDataParam("coverImage") InputStream inputStream, @PathParam("isrc") String isrc){
-        try {
-            //byte[] binary = readFile(inputStream);
-            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-            int nRead;
-            byte[] data = new byte[1024];
-            while ((nRead = inputStream.read(data, 0, data.length)) != -1) {
-                buffer.write(data, 0, nRead);
-            }
-
-            buffer.flush();
-            buffer.close();
-            byte[] binary = buffer.toByteArray();
-           // String str = new String(binary, "Cp1252");
-           // str = str.substring(str.indexOf("\r\n\r\n"),str.lastIndexOf("------"));
-            //binary = str.trim().getBytes("Cp1252");
-
-            String mime = ".jpg";
-            Album a = new Album();
-            a.setIsrc(isrc);
-            a.setCoverImage(binary);
-            a.setMimeType(mime);
-            this.repo.editImage(a);
-            return successOperation("Uploaded image for " + isrc);
-
-        }catch (Exception e) {
-            return errorResponse(e);
-        }
-    }
-
+//    @POST
+//    @Path("/upload/{isrc}")
+//    @Consumes(MediaType.MULTIPART_FORM_DATA)
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public Response uploadFile(@Context HttpHeaders headers, @FormDataParam("coverImage") InputStream inputStream, @PathParam("isrc") String isrc){
+//        try {
+//            //byte[] binary = readFile(inputStream);
+//            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+//            int nRead;
+//            byte[] data = new byte[1024];
+//            while ((nRead = inputStream.read(data, 0, data.length)) != -1) {
+//                buffer.write(data, 0, nRead);
+//            }
+//
+//            buffer.flush();
+//            buffer.close();
+//            byte[] binary = buffer.toByteArray();
+//           // String str = new String(binary, "Cp1252");
+//           // str = str.substring(str.indexOf("\r\n\r\n"),str.lastIndexOf("------"));
+//            //binary = str.trim().getBytes("Cp1252");
+//
+//            String mime = ".jpg";
+//            Album a = new Album();
+//            a.setIsrc(isrc);
+//            a.setCoverImage(binary);
+//            a.setMimeType(mime);
+//            this.repo.editImage(a);
+//            return successOperation("Uploaded image for " + isrc);
+//
+//        }catch (Exception e) {
+//            return errorResponse(e);
+//        }
+//    }
+//
     @GET
     @Path("/download/{isrc}")
     public Response downloadFile(@Context HttpHeaders headers, @PathParam("isrc") String isrc){
@@ -171,23 +171,22 @@ public class AlbumController {
         return response.build();
     }
 
-//    @DELETE
-//    @Path("/upload/{isrc}")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Response removeFile(@PathParam("isrc") String isrc){
-//        try {
-//            Album a = new Album();
-//            a.setIsrc(isrc);
-//            repo.editImage(a);
-//            return successOperation("Succesfully Deleted image for " + isrc);
-//        }catch (Exception e){
-//            return errorResponse(e);
-//        }
-//    }
+    @DELETE
+    @Path("/img/{isrc}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response removeFile(@PathParam("isrc") String isrc){
+        try {
+            Album a = new Album();
+            a.setIsrc(isrc);
+            repo.editImage(a);
+            return successOperation("Successfully Deleted image for " + isrc);
+        }catch (Exception e){
+            return errorResponse(e);
+        }
+    }
 
 
-
-    private Response errorResponse(Exception e){
+    public static Response errorResponse(Exception e){
         WebError error = new WebError("RepException", "Failed Operation: \n\n" + e.getMessage());
         return Response.status(200).entity(error).build();
     }
@@ -200,7 +199,7 @@ public class AlbumController {
         return Response.status(200).entity(a).build();
     }
 
-    private Response successOperation(String mes){
+    public static Response successOperation(String mes){
         return Response.status(200).entity(new Message(mes)).build();
     }
 
