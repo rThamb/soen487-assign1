@@ -91,7 +91,7 @@ public class AlbumDAO implements AlbumRepo, LogRepo{
         return a;
     }
 
-    public void add(Album a) throws SQLException {
+    public synchronized void add(Album a) throws SQLException {
         String query = "INSERT INTO t_album(isrc, title, description, year_released, artist_first_name, artist_last_name, cover, media_type) " +
                 "VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
 
@@ -118,7 +118,7 @@ public class AlbumDAO implements AlbumRepo, LogRepo{
         }
     }
 
-    public void update(Album a) throws SQLException {
+    public synchronized void update(Album a) throws SQLException {
         String query = "UPDATE t_album\n" +
                 "SET title=?, description=?, year_released=?, artist_first_name=?, artist_last_name=? \n" +
                 "WHERE isrc = ?";
@@ -143,7 +143,7 @@ public class AlbumDAO implements AlbumRepo, LogRepo{
         enterLog(a.getIsrc(), UPDATE_TAG);
     }
 
-    public void delete(String isrc) throws SQLException {
+    public synchronized void delete(String isrc) throws SQLException {
 
         String query = "DELETE FROM t_album WHERE isrc = ?";
 
@@ -162,7 +162,7 @@ public class AlbumDAO implements AlbumRepo, LogRepo{
     }
 
     @Override
-    public void editImage(Album album) throws SQLException {
+    public synchronized void editImage(Album album) throws SQLException {
 
         String query = "UPDATE t_album\n" +
                 "SET cover=?, media_type=? \n" +

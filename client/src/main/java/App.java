@@ -10,6 +10,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
@@ -83,21 +84,21 @@ public class App {
             case 5:
                 o5();
                 break;
-            case 6:
-                o6();
-                break;
-            case 7:
-                o7();
-                break;
-            case 8:
-                o8();
-                break;
-            case 9:
-                o9();
-                break;
-            case 10:
-                o10();
-                break;
+//            case 6:
+//                o6();
+//                break;
+//            case 7:
+//                o7();
+//                break;
+//            case 8:
+//                o8();
+//                break;
+//            case 9:
+//                o9();
+//                break;
+//            case 10:
+//                o10();
+//                break;
             case 11:
                 o11();
                 break;
@@ -229,7 +230,7 @@ public class App {
     }
     public static void o14() throws Exception {
         Scanner input = new Scanner(System.in);
-        System.err.println("Select to, from, type: (YYYY-MM-DD;YYYY-MM-DD; CREATE|UPDATE|DELETE)");
+        System.err.println("Select to, from, type: (YYYY-MM-DD;YYYY-MM-DD; CREATE|UPDATE|DELETE;) enter whitespace for unwanted fields");
         String[] inputs = input.nextLine().split(";");
         List<LogEntry> logs = logRepo.getLogs(inputs[0], inputs[1], inputs[2]);
 
@@ -238,7 +239,7 @@ public class App {
         }
     }
     public static void o15() throws Exception {
-        throw new RepException("Rep Exception: Not Supported");
+        logRepo.clearLogs();
     }
 
     private static String logEntry(LogEntry log){
